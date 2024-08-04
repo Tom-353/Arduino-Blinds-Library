@@ -1,0 +1,1 @@
+Library for controlling dumb blinds using timing.

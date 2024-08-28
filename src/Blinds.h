@@ -25,9 +25,10 @@ class Timer {
 private:
     unsigned long _beginTime;
     unsigned long _duration;
-    bool _started = false;
 
 public:
+    bool started = false;
+    
     Timer(unsigned long duration = 0);
 
     void set_duration(unsigned long duration);

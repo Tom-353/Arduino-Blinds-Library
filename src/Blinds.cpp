@@ -3,6 +3,7 @@
 
 Timer::Timer(unsigned long duration=0) {
     _duration=duration;
+    started = false;
 }
 
 void Timer::set_duration(unsigned long duration) {
@@ -11,15 +12,15 @@ void Timer::set_duration(unsigned long duration) {
 
 void Timer::start() {
     _beginTime=millis();
-    _started=true;
+    started=true;
 }
 
 void Timer::stop() {
-    _started=false;
+    started=false;
 }
 
 bool Timer::finished() {
-    if (!_started){
+    if (!started){
         return false;
     }
     return (unsigned long)(millis() - _beginTime) >= _duration ;
@@ -85,7 +86,7 @@ void MotorController::loop(){
 void ButtonDebounce::begin(int pin){
     _buttonPin = pin;
     pinMode(_buttonPin,INPUT_PULLUP);
-    _debounceTimer.set_duration(100);
+    _debounceTimer.set_duration(10);
 }
 
 void ButtonDebounce::loop(){
@@ -93,7 +94,7 @@ void ButtonDebounce::loop(){
         if(_debounceTimer.finished()){
             pressed=true;
         }
-        else{
+        else if (!_debounceTimer.started){
             _debounceTimer.start();
         }
     }

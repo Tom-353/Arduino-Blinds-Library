@@ -167,6 +167,7 @@ void BlindController::loop(){
     else if(_forceStop && ((position==DOWN && _buttonUp.pressed) || (position==UP && _buttonDown.pressed))){
         if(_motor.stop()){
             position = NA;
+            positionTarget = NA;
         }
     }
 }

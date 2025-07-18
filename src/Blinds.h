@@ -97,6 +97,8 @@ public:
 
     void go_to(BlindPosition targetPosition);
 
+    void stop();
+
     void loop();
 };
 

@@ -164,7 +164,13 @@ void BlindController::loop(){
             else                    {_motor.move_down(_timeUpDown); position=DOWN;} //sjet úplně dolů
         }
     }
-    else if(_forceStop && ((position==DOWN && _buttonUp.pressed) || (position==UP && _buttonDown.pressed))){
+    else if((position==DOWN && _buttonUp.pressed) || (position==UP && _buttonDown.pressed)) {
+        this->stop();
+    }
+}
+
+void BlindController::stop() {
+    if (_forceStop) {
         if(_motor.stop()){
             position = NA;
             positionTarget = NA;

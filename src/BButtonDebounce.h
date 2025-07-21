@@ -7,11 +7,12 @@ class ButtonDebounce {
 private:
     int _buttonPin;
     Timer _debounceTimer;
+    bool _pressed = false;
 
 public:
-    bool pressed = false;
+    ButtonDebounce(int pin);
 
-    void begin(int pin);
+    bool is_pressed();
 
     /**
      * Process timers.

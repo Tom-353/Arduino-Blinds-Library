@@ -32,11 +32,11 @@ private:
     ButtonDebounce _buttonUp;
     ButtonDebounce _buttonDown;
     bool _forceStop;
+    bool _still;
+    BlindPosition _position = NA;
 
 public:
-    BlindPosition position = NA;
     BlindPosition positionTarget = NA;
-    bool still;
 
     /**
      * Initialize the blind.
@@ -45,15 +45,23 @@ public:
      * @param forceStop Whether to enable stoping the blind while it is moving.
      * @param newPosition The position the blind was in before initialization.
      */
-    void begin(int motorPinUp, int motorPinDown, int buttonPinUp,
-               int buttonPinDown, unsigned long timeUpDown,
-               unsigned long timeTilt, bool forceStop=false, BlindPosition newPosition=NA);
+    BlindController(int motorPinUp, int motorPinDown, int buttonPinUp,
+                    int buttonPinDown, unsigned long timeUpDown,
+                    unsigned long timeTilt, bool forceStop=false, BlindPosition newPosition=NA);
+
+    BlindPosition get_position();
+
+    bool is_still();
 
     /**
      * Tell the blind to go to a predefined position.
      * @param targetPosition The position to go to.
      */
     void go_to(BlindPosition targetPosition);
+
+    void go_up();
+
+    void go_down();
 
     /**
      * Immediately stops the blind.

@@ -1,7 +1,10 @@
-#ifndef Blinds_h
-#define Blinds_h
+#ifndef BLINDS_H
+#define BLINDS_H
 
 #define _TIME_COMMAND_TIMEOUT 500
+
+#include "BMotor.h"
+#include "BButtonDebounce.h"
 
 /*
 UP->DOWN UD
@@ -21,62 +24,6 @@ enum BlindPosition {
     UP = 4
 };
 
-class Timer {
-private:
-    unsigned long _beginTime;
-    unsigned long _duration;
-
-public:
-    bool started = false;
-    
-    Timer(unsigned long duration = 0);
-
-    void set_duration(unsigned long duration);
-
-    void start();
-
-    void stop();
-
-    bool finished();
-};
-
-class MotorController {
-private:
-    int _pinUp;
-    int _pinDown;
-    Timer _MovementTimer;
-    Timer _RelayBeginTimeout;
-    Timer _RelayEndTimeout;
-
-public:
-    bool available = true;
-
-    void begin(int pinUp, int pinDown);
-
-    bool stop();
-
-    void move(unsigned long time_ms, bool up);
-
-    void move_up(unsigned long time_ms);
-
-    void move_down(unsigned long time_ms);
-
-    void loop();
-};
-
-class ButtonDebounce {
-private:
-    int _buttonPin;
-    Timer _debounceTimer;
-
-public:
-    bool pressed = false;
-
-    void begin(int pin);
-
-    void loop();
-};
-
 class BlindController {
 private:
     MotorController _motor;
@@ -91,15 +38,32 @@ public:
     BlindPosition positionTarget = NA;
     bool still;
 
+    /**
+     * Initialize the blind.
+     * @param timeUpDown The time in milliseconds it takes for the blind to move from the top to the bottom.
+     * @param timeTilt The time in milliseconds it takes for the blind to tilt from horizontal to vertical.
+     * @param forceStop Whether to enable stoping the blind while it is moving.
+     * @param newPosition The position the blind was in before initialization.
+     */
     void begin(int motorPinUp, int motorPinDown, int buttonPinUp,
                int buttonPinDown, unsigned long timeUpDown,
                unsigned long timeTilt, bool forceStop=false, BlindPosition newPosition=NA);
 
+    /**
+     * Tell the blind to go to a predefined position.
+     * @param targetPosition The position to go to.
+     */
     void go_to(BlindPosition targetPosition);
 
+    /**
+     * Immediately stops the blind.
+     */
     void stop();
 
+    /**
+     * Process all timers and buttons.
+     * Make sure to call this method as often as possible.
+     */ 
     void loop();
 };
-
 #endif

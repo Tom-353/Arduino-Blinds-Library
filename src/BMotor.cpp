@@ -13,7 +13,7 @@ void MotorController::begin(int pinUp,int pinDown) {
 }
 
 bool MotorController::stop(){
-    if(!_RelayBeginTimeout.finished()){
+    if(!_RelayBeginTimeout.is_finished()){
         return false;
     }
     digitalWrite(_pinDown, HIGH);
@@ -49,10 +49,10 @@ void MotorController::move_down(unsigned long time_ms){
 }
 
 void MotorController::loop(){
-    if (_MovementTimer.finished()){
+    if (_MovementTimer.is_finished()){
         stop();
     }
-    if (_RelayEndTimeout.finished()){
+    if (_RelayEndTimeout.is_finished()){
         _RelayEndTimeout.stop();
         available=true;
     }

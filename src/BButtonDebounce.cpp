@@ -9,10 +9,10 @@ void ButtonDebounce::begin(int pin){
 
 void ButtonDebounce::loop(){
     if(digitalRead(_buttonPin) == LOW){
-        if(_debounceTimer.finished()){
+        if(_debounceTimer.is_finished()){
             pressed=true;
         }
-        else if (!_debounceTimer.started){
+        else if (!_debounceTimer.is_running()){
             _debounceTimer.start();
         }
     }

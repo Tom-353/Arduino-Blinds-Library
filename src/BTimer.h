@@ -8,23 +8,29 @@ class Timer {
 private:
     unsigned long _beginTime;
     unsigned long _duration;
+    bool _started = false;
 
 public:
-    bool started = false;
     
     Timer(unsigned long duration = 0);
+
+    bool is_running();
 
     void set_duration(unsigned long duration);
 
     void start();
 
-    void stop();
+    void start(unsigned long duration);
+
+    /**
+     * Stops the timer and returns the remaining time.
+     */
+    unsigned long stop();
 
     /**
      * Checks if the timer has finished.
      * Does not restart or stop the timer.
      */
-    bool finished();
+    bool is_finished();
 };
-
 #endif

@@ -9,10 +9,9 @@ BlindController::BlindController(int motorPinUp, int motorPinDown, int buttonPin
     _timeUpDown(timeUpDown),
     _timeTilt(timeTilt),
     _position(newPosition),
-    _forceStop(forceStop)
-{
-    _motor.begin(motorPinUp, motorPinDown);
-}
+    _forceStop(forceStop),
+    _motor(motorPinUp, motorPinDown)
+{ }
 
 BlindPosition BlindController::get_position() {
     return _position;
@@ -61,13 +60,13 @@ void BlindController::go_down() {
 
 void BlindController::loop(){
     _motor.loop();
-    _still = _motor.available;
+    _still = _motor.is_available();
     _buttonUp.loop();
     _buttonDown.loop();
     if(positionTarget == _position){
         positionTarget = NA;
     }
-    if(_motor.available){
+    if(_motor.is_available()){
         if(positionTarget != NA){
             go_to(positionTarget);
         }

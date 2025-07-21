@@ -3,6 +3,8 @@
 
 #include "BTimer.h"
 
+#define _TIME_COMMAND_TIMEOUT 500
+
 class MotorController {
 private:
     int _pinUp;
@@ -10,11 +12,12 @@ private:
     Timer _MovementTimer;
     Timer _RelayBeginTimeout;
     Timer _RelayEndTimeout;
+    bool _available = true;
 
 public:
-    bool available = true;
+    MotorController(int pinUp, int pinDown);
 
-    void begin(int pinUp, int pinDown);
+    bool is_available();
 
     bool stop();
 

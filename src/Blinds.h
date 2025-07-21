@@ -1,8 +1,6 @@
 #ifndef BLINDS_H
 #define BLINDS_H
 
-#define _TIME_COMMAND_TIMEOUT 500
-
 #include "BMotor.h"
 #include "BButtonDebounce.h"
 

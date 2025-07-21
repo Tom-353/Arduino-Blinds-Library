@@ -1,19 +1,24 @@
 #include <Arduino.h>
 #include "BMotor.h"
 
-void MotorController::begin(int pinUp,int pinDown) {
-    _pinUp   = pinUp;
-    _pinDown = pinDown;
+MotorController::MotorController(int pinUp,int pinDown) :
+    _pinUp(pinUp),
+    _pinDown(pinDown),
+    _RelayEndTimeout(_TIME_COMMAND_TIMEOUT),
+    _RelayBeginTimeout(100)
+{
     pinMode(_pinUp,   OUTPUT);
     pinMode(_pinDown, OUTPUT);
     digitalWrite(_pinUp,   HIGH);
     digitalWrite(_pinDown, HIGH);
-    _RelayEndTimeout.set_duration(_TIME_COMMAND_TIMEOUT);
-    _RelayBeginTimeout.set_duration(100);
+}
+
+bool MotorController::is_available() {
+    return _available;
 }
 
 bool MotorController::stop(){
-    if(!_RelayBeginTimeout.is_finished()){
+    if(!_RelayBeginTimeout.is_finished()) {
         return false;
     }
     digitalWrite(_pinDown, HIGH);
@@ -25,8 +30,10 @@ bool MotorController::stop(){
 }
 
 void MotorController::move(unsigned long time_ms, bool up){
-    if(!available){return;}
-    if(up){
+    if(!_available) {
+        return;
+    }
+    if(up) {
         digitalWrite(_pinDown, HIGH);
         digitalWrite(_pinUp,   LOW);
     }
@@ -36,24 +43,24 @@ void MotorController::move(unsigned long time_ms, bool up){
     }
     _MovementTimer.set_duration(time_ms);
     _MovementTimer.start();
-    available=false;
+    _available=false;
     _RelayBeginTimeout.start();
 }
 
-void MotorController::move_up(unsigned long time_ms){
+void MotorController::move_up(unsigned long time_ms) {
     move(time_ms,true);
 }
 
-void MotorController::move_down(unsigned long time_ms){
+void MotorController::move_down(unsigned long time_ms) {
     move(time_ms,false);
 }
 
-void MotorController::loop(){
-    if (_MovementTimer.is_finished()){
+void MotorController::loop() {
+    if (_MovementTimer.is_finished()) {
         stop();
     }
-    if (_RelayEndTimeout.is_finished()){
+    if (_RelayEndTimeout.is_finished()) {
         _RelayEndTimeout.stop();
-        available=true;
+        _available=true;
     }
 }
